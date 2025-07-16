@@ -20,6 +20,9 @@ require("awful.hotkeys_popup.keys")
 
 awful.spawn.with_shell("picom --config ~/.config/picom/picom.conf &")
 
+
+
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -497,7 +500,9 @@ client.connect_signal("request::titlebars", function(c)
     end)
   )
 
-  awful.titlebar(c):setup({
+  awful.titlebar(c, {
+      bg_focus = beautiful.bg_normal
+  }):setup({
     { -- Left
       awful.titlebar.widget.iconwidget(c),
       buttons = buttons,

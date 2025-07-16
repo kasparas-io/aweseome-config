@@ -10,9 +10,9 @@ local themes_path = string.format("%s/.config/awesome/themes/%s/", os.getenv("HO
 
 local theme = {}
 
-theme.font = "RobotoMono Nerd Font 10"
+theme.font = "RobotoMono Nerd Font 11"
 
-theme.bg_normal = "#222222"
+theme.bg_normal = "#0a0a0a"
 theme.bg_focus = "#535d6c"
 theme.bg_urgent = "#ff0000"
 theme.bg_minimize = "#444444"
@@ -26,7 +26,7 @@ theme.fg_minimize = "#ffffff"
 theme.useless_gap = dpi(4)
 theme.border_width = dpi(1)
 theme.border_normal = "#000000"
-theme.border_focus = "#535d6c"
+theme.border_focus = "#404040"
 theme.border_marked = "#91231c"
 
 -- There are other variable sets
