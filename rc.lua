@@ -91,65 +91,17 @@ awful.layout.layouts = {
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
-myawesomemenu = {
-  {
-    "hotkeys",
-    function()
-      hotkeys_popup.show_help(nil, awful.screen.focused())
-    end,
-  },
-  { "manual", terminal .. " -e man awesome" },
-  { "edit config", editor_cmd .. " " .. awesome.conffile },
-  { "restart", awesome.restart },
-  {
-    "quit",
-    function()
-      awesome.quit()
-    end,
-  },
-}
 
-mymainmenu = awful.menu({
-  items = {
-    { "awesome", myawesomemenu, beautiful.awesome_icon },
-    { "open terminal", terminal },
-  },
-})
-
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon, menu = mymainmenu })
-
--- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
-
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
   awful.button({}, 1, function(t)
     t:view_only()
-  end),
-  awful.button({ modkey }, 1, function(t)
-    if client.focus then
-      client.focus:move_to_tag(t)
-    end
-  end),
-  awful.button({}, 3, awful.tag.viewtoggle),
-  awful.button({ modkey }, 3, function(t)
-    if client.focus then
-      client.focus:toggle_tag(t)
-    end
-  end),
-  awful.button({}, 4, function(t)
-    awful.tag.viewnext(t.screen)
-  end),
-  awful.button({}, 5, function(t)
-    awful.tag.viewprev(t.screen)
   end)
 )
 
@@ -163,12 +115,6 @@ local tasklist_buttons = gears.table.join(
   end),
   awful.button({}, 3, function()
     awful.menu.client_list({ theme = { width = 250 } })
-  end),
-  awful.button({}, 4, function()
-    awful.client.focus.byidx(1)
-  end),
-  awful.button({}, 5, function()
-    awful.client.focus.byidx(-1)
   end)
 )
 
@@ -192,10 +138,8 @@ awful.screen.connect_for_each_screen(function(s)
   set_wallpaper(s)
 
   -- Each screen has its own tag table.
-  awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+  awful.tag({ "1", "2", "3", "4", "5" }, s, awful.layout.layouts[1])
 
-  -- Create a promptbox for each screen
-  s.mypromptbox = awful.widget.prompt()
   -- Create an imagebox widget which will contain an icon indicating which layout we're using.
   -- We need one layoutbox per screen.
   s.mylayoutbox = awful.widget.layoutbox(s)
@@ -214,7 +158,7 @@ awful.screen.connect_for_each_screen(function(s)
     end)
   ))
   -- Create a taglist widget
-  s.mytaglist = awful.widget.taglist({
+  s.taglist = awful.widget.taglist({
     screen = s,
     filter = awful.widget.taglist.filter.all,
     buttons = taglist_buttons,
@@ -235,16 +179,14 @@ awful.screen.connect_for_each_screen(function(s)
     layout = wibox.layout.align.horizontal,
     { -- Left widgets
       layout = wibox.layout.fixed.horizontal,
-      mylauncher,
-      s.mytaglist,
-      s.mypromptbox,
+      s.taglist,
     },
     s.mytasklist, -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
-      mykeyboardlayout,
+      awful.widget.keyboardlayout(),
       wibox.widget.systray(),
-      mytextclock,
+      wibox.widget.textclock(),
       s.mylayoutbox,
     },
   })
@@ -252,13 +194,6 @@ end)
 -- }}}
 
 -- {{{ Mouse bindings
-root.buttons(gears.table.join(
-  awful.button({}, 3, function()
-    mymainmenu:toggle()
-  end),
-  awful.button({}, 4, awful.tag.viewnext),
-  awful.button({}, 5, awful.tag.viewprev)
-))
 -- }}}
 
 -- {{{ Key bindings
@@ -367,25 +302,7 @@ globalkeys = gears.table.join(
     if c then
       c:emit_signal("request::activate", "key.unminimize", { raise = true })
     end
-  end, { description = "restore minimized", group = "client" }),
-
-  -- Prompt
-  awful.key({ modkey }, "r", function()
-    awful.screen.focused().mypromptbox:run()
-  end, { description = "run prompt", group = "launcher" }),
-
-  awful.key({ modkey }, "x", function()
-    awful.prompt.run({
-      prompt = "Run Lua code: ",
-      textbox = awful.screen.focused().mypromptbox.widget,
-      exe_callback = awful.util.eval,
-      history_path = awful.util.get_cache_dir() .. "/history_eval",
-    })
-  end, { description = "lua execute prompt", group = "awesome" }),
-  -- Menubar
-  awful.key({ modkey }, "p", function()
-    menubar.show()
-  end, { description = "show the menubar", group = "launcher" })
+  end, { description = "restore minimized", group = "client" })
 )
 
 clientkeys = gears.table.join(
