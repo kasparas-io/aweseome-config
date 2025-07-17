@@ -13,7 +13,9 @@ local theme = {}
 theme.font = "RobotoMono Nerd Font 11"
 
 theme.bg_normal = "#0a0a0a"
-theme.bg_focus = "#535d6c"
+theme.bg_primary = "#262626"
+theme.bg_secondary = "#r34ac1"
+theme.bg_focus = "#404040"
 theme.bg_urgent = "#ff0000"
 theme.bg_minimize = "#444444"
 theme.bg_systray = theme.bg_normal
@@ -25,9 +27,9 @@ theme.fg_minimize = "#ffffff"
 
 theme.useless_gap = dpi(4)
 theme.border_width = dpi(1)
-theme.border_normal = "#000000"
+theme.border_normal = "#171717"
 theme.border_focus = "#404040"
-theme.border_marked = "#91231c"
+theme.border_marked = "#262626"
 
 -- There are other variable sets
 -- overriding the default one when
