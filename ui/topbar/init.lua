@@ -7,17 +7,23 @@ local theme = require("themes.Kasparas.theme")
 local dpi = xresources.apply_dpi
 
 local function topbar(s)
-
-
   s.taglist = taglist.new({
     screen = s,
   })
 
-  -- Create clock widget with larger font
-  local clock = wibox.widget {
+  -- Create clock widget with larger font and center alignment
+  local _clock = wibox.widget {
     widget = awful.widget.textclock,
     format = "<span font='RobotoMono Nerd Font 14'>%H:%M</span>",
-    refresh = 30
+    refresh = 30,
+    align = "center" -- Add alignment
+  }
+
+  local clock = wibox.widget {
+    _clock,
+    widget = wibox.container.place,
+    halign = "center",
+    content_fill_horizontal = true
   }
 
   local wibar = awful.wibar({
@@ -31,30 +37,35 @@ local function topbar(s)
 
   wibar:setup {
     {
-      {
-        -- Left widgets
-        {
-          widget = wibox.container.margin,
-          top = dpi(6),
-          bottom = dpi(6),
-          left = dpi(6),
-          right = dpi(6),
-          s.taglist
-        },
-        layout = wibox.layout.fixed.horizontal
-      },
-      -- Middle widget (clock)
-      {
-        clock,
-        layout = wibox.layout.fixed.horizontal,
-        spacing = 0,
-      },
-      -- Right widgets
-      {
-        layout = wibox.layout.fixed.horizontal
-      },
       layout = wibox.layout.align.horizontal,
-      expand = "outside"  -- This is the key change
+      {
+        widget = wibox.container.margin,
+        top = dpi(6),
+        bottom = dpi(6),
+        left = dpi(6),
+        right = dpi(6),
+        s.taglist
+      },
+      {
+        widget = wibox.container.margin,
+        right = dpi(268),
+        {
+          layout = wibox.layout.fixed.horizontal,
+          clock
+        },
+      },
+      {
+        widget = wibox.container.margin,
+        top = dpi(6),
+        bottom = dpi(6),
+        left = dpi(6),
+        right = dpi(6),
+        {
+          layout = wibox.layout.fixed.horizontal,
+          awful.widget.keyboardlayout(),
+          awful.widget.layoutbox(s),
+        }
+      },
     },
     bg = theme.bg_normal,
     widget = wibox.container.background,
